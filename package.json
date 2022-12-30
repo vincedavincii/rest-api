@@ -8,7 +8,9 @@
 		"build": "tsc",
 		"start-server": "node dist/server.js",
 		"start-dev-server": "tsc-watch --onSuccess \" node dist/server.js\"",
-		"dev": "npm-run-all clean build start-dev-server"
+		"dev": "npm-run-all clean build start-dev-server",
+		"populate-db": "npm-run-all clean build run-populate-db-script",
+		"run-populate-db-script": "node dist/models/populateDB.js"
 	},
 	"author": "",
 	"license": "MIT",
