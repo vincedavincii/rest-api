@@ -5,7 +5,7 @@ if (result.error) {
 	console.log(`Error loading Env Variables, Terminating...`);
 	process.exit(1);
 }
-
+import "reflect-metadata";
 import * as express from "express";
 import {root} from "./routes/root";
 import {isInteger} from "./utils";
