@@ -8,8 +8,9 @@ if (result.error) {
 
 import * as express from "express";
 import {root} from "./routes/root";
-import {isInteger} from "./routes/utils";
+import {isInteger} from "./utils";
 import {logger} from "./logger";
+import {AppDataSource} from "./dataSource";
 
 const app = express();
 
@@ -38,6 +39,13 @@ function startServer() {
 	});
 }
 
-setupExpress();
-
-startServer();
+AppDataSource.initialize()
+	.then(() => {
+		logger.info(` Datasource initialized successfully`);
+		setupExpress();
+		startServer();
+	})
+	.catch((err) => {
+		logger.error(` Error Occured while initializing Datasource.`, err);
+		process.exit(1);
+	});
