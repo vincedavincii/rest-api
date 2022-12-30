@@ -10,7 +10,9 @@
 		"start-dev-server": "tsc-watch --onSuccess \" node dist/server.js\"",
 		"dev": "npm-run-all clean build start-dev-server",
 		"populate-db": "npm-run-all clean build run-populate-db-script",
-		"run-populate-db-script": "node dist/models/populateDB.js"
+		"run-populate-db-script": "node dist/models/populateDB.js",
+		"delete-db": "npm-run-all clean build run-delete-db-script",
+		"run-delete-db-script": "node dist/models/deleteDB.js"
 	},
 	"author": "",
 	"license": "MIT",
