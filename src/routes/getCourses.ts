@@ -10,7 +10,7 @@ export async function getCourses(
 ) {
 	try {
 		logger.debug(` GetCourse function called`);
-		throw {error: "Thrown Error!"};
+		//throw {error: "Thrown Error!"};
 		const courses = await AppDataSource.getRepository(Course)
 			.createQueryBuilder("courses")
 			.orderBy("courses.seqNo")
