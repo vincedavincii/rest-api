@@ -18,6 +18,7 @@ async function populateDb() {
 	for (let courseData of courses) {
 		console.log(`Adding Course: ${courseData.title}`);
 		const course = courseRepository.create(courseData);
+		console.log(courseData);
 		await courseRepository.save(course);
 
 		for (let lessonData of courseData.lessons) {

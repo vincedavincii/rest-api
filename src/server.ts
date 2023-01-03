@@ -11,11 +11,15 @@ import {root} from "./routes/root";
 import {isInteger} from "./utils";
 import {logger} from "./logger";
 import {AppDataSource} from "./dataSource";
+import {getCourses} from "./routes/getCourses";
+import {defaultErrorHandler} from "./middleware/defaultErrorHandler";
 
 const app = express();
 
 function setupExpress() {
 	app.route("/").get(root);
+	app.route("/api/course").get(getCourses);
+	app.use(defaultErrorHandler);
 }
 
 function startServer() {
