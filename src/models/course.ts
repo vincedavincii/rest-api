@@ -29,6 +29,8 @@ export class Course {
 
 	@Column()
 	category: string;
+	@Column()
+	url: string;
 
 	@OneToMany(() => Lesson, (lesson) => lesson.course)
 	lessons: Lesson[];

@@ -13,14 +13,26 @@ import {logger} from "./logger";
 import {AppDataSource} from "./dataSource";
 import {getCourses} from "./routes/getCourses";
 import {defaultErrorHandler} from "./middleware/defaultErrorHandler";
+import {findCourseUrl} from "./routes/findCourseUrl";
+import {findLessons} from "./routes/findLessons";
+import updateCourse from "./routes/updateCourse";
+import createCourse from "./routes/createCourse";
+import {deleteCourses} from "./routes/deleteCourse";
 
 const cors = require("cors");
+const bodyParser = require("body-parser");
 const app = express();
 
 function setupExpress() {
 	app.use(cors({origin: true}));
+	app.use(bodyParser.json());
 	app.route("/").get(root);
 	app.route("/api/course").get(getCourses);
+	app.route("/api/course/:courseUrl").get(findCourseUrl);
+	app.route("/api/course/:courseId/lessons").get(findLessons);
+	app.route("/api/course/:courseId").patch(updateCourse);
+	app.route("/api/course").post(createCourse);
+	app.route("/api/course/:courseId").delete(deleteCourses);
 	app.use(defaultErrorHandler);
 }
 
