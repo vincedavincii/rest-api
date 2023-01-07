@@ -2,11 +2,13 @@ import * as dotenv from "dotenv";
 const result = dotenv.config();
 
 import "reflect-metadata";
-import {COURSES} from "./data";
+import {COURSES, USERS} from "./data";
 import {AppDataSource} from "../dataSource";
 import {Course} from "./course";
 import {DeepPartial} from "typeorm";
 import {Lesson} from "./lesson";
+import Users from "./users";
+import {passwordCalculator} from "../utils";
 
 async function populateDb() {
 	await AppDataSource.initialize();
@@ -27,6 +29,20 @@ async function populateDb() {
 			lesson.course = course;
 			await lessonRepository.save(lesson);
 		}
+	}
+
+	const users = Object.values(USERS) as any[];
+	for (let userData of users) {
+		const {email, pictureUrl, passwordSalt, isAdmin, plainTextPassword} =
+			userData;
+		const saveUserInDb = AppDataSource.getRepository(Users).create({
+			email,
+			pictureUrl,
+			isAdmin,
+			passwordSalt,
+			passwordHash: await passwordCalculator(plainTextPassword, passwordSalt),
+		});
+		await AppDataSource.manager.save(saveUserInDb);
 	}
 
 	const totalCourses = await courseRepository.createQueryBuilder().getCount();
