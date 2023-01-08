@@ -18,6 +18,7 @@ import {findLessons} from "./routes/findLessons";
 import updateCourse from "./routes/updateCourse";
 import createCourse from "./routes/createCourse";
 import {deleteCourses} from "./routes/deleteCourse";
+import createUser from "./routes/createUser";
 
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -33,6 +34,7 @@ function setupExpress() {
 	app.route("/api/course/:courseId").patch(updateCourse);
 	app.route("/api/course").post(createCourse);
 	app.route("/api/course/:courseId").delete(deleteCourses);
+	app.route("/api/users").post(createUser);
 	app.use(defaultErrorHandler);
 }
 
