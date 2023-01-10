@@ -19,6 +19,9 @@ import updateCourse from "./routes/updateCourse";
 import createCourse from "./routes/createCourse";
 import {deleteCourses} from "./routes/deleteCourse";
 import createUser from "./routes/createUser";
+import {login} from "./routes/login";
+import checkIfAuthenticated from "./middleware/authentication";
+import checkAdmin from "./middleware/checkAdmin";
 
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -28,13 +31,18 @@ function setupExpress() {
 	app.use(cors({origin: true}));
 	app.use(bodyParser.json());
 	app.route("/").get(root);
-	app.route("/api/course").get(getCourses);
-	app.route("/api/course/:courseUrl").get(findCourseUrl);
-	app.route("/api/course/:courseId/lessons").get(findLessons);
-	app.route("/api/course/:courseId").patch(updateCourse);
-	app.route("/api/course").post(createCourse);
-	app.route("/api/course/:courseId").delete(deleteCourses);
-	app.route("/api/users").post(createUser);
+	app.route("/api/course").get(checkIfAuthenticated, getCourses);
+	app.route("/api/course/:courseUrl").get(checkIfAuthenticated, findCourseUrl);
+	app
+		.route("/api/course/:courseId/lessons")
+		.get(checkIfAuthenticated, findLessons);
+	app.route("/api/course/:courseId").patch(checkIfAuthenticated, updateCourse);
+	app.route("/api/course").post(checkIfAuthenticated, createCourse);
+	app
+		.route("/api/course/:courseId")
+		.delete(checkIfAuthenticated, deleteCourses);
+	app.route("/api/users").post(checkIfAuthenticated, checkAdmin, createUser);
+	app.route("/api/login").post(login);
 	app.use(defaultErrorHandler);
 }
 

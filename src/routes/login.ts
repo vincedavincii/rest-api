@@ -3,6 +3,8 @@ import {logger} from "../logger";
 import {AppDataSource} from "../dataSource";
 import Users from "../models/users";
 import {passwordCalculator} from "../utils";
+const JWT_SECRET = process.env.JWT_SECRET;
+const jwt = require("jsonwebtoken");
 
 export async function login(
 	request: Request,
@@ -21,7 +23,7 @@ export async function login(
 			.where("email = :email", {email})
 			.getOne();
 
-		if (user) {
+		if (!user) {
 			const message = `Login denied.`;
 			logger.info(`${message} - ${email}`);
 			response.status(403).json({message});
@@ -38,10 +40,21 @@ export async function login(
 		}
 		logger.info(`User with ${email} has now logged in`);
 		const {pictureUrl, isAdmin} = user;
-		response.status(200).json({
+		const authJwt = {
+			userId: user.id,
 			email,
-			pictureUrl,
 			isAdmin,
+		};
+		const authJwtToken = await jwt.sign(authJwt, JWT_SECRET);
+		response.status(200).json({
+			user: {
+				email,
+				pictureUrl,
+				isAdmin,
+			},
+			authJwtToken,
 		});
-	} catch (error) {}
+	} catch (error) {
+		logger.error(`Error Logging in`);
+	}
 }
