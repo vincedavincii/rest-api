@@ -1,22 +1,22 @@
 import {NextFunction, Request, Response} from "express";
 import {logger} from "../logger";
 import {AppDataSource} from "../dataSource";
-import {Lesson} from "../models/lesson";
 import {isInteger} from "../utils";
+import {Products} from "../models/products";
 
-export async function findLessons(
+export async function FindProducts(
 	request: Request,
 	response: Response,
 	next: NextFunction
 ) {
 	try {
-		logger.debug(` FindLessons()  called`);
-		const courseId = request.params.courseId,
+		logger.debug(` FindProducts()  called`);
+		const companyId = request.params.companyId,
 			query = request.query as any,
 			pageNumber = query?.pageNumber ?? "0",
 			pageSize = query?.pageSize ?? "3";
-		if (!isInteger(courseId)) {
-			throw ` Invalid course id ${courseId}`;
+		if (!isInteger(companyId)) {
+			throw ` Invalid company id ${companyId}`;
 		}
 		if (!isInteger(pageNumber)) {
 			throw ` Invalid page number ${pageNumber}`;
@@ -25,17 +25,17 @@ export async function findLessons(
 			throw ` Invalid page size ${pageSize}`;
 		}
 
-		const lessons = await AppDataSource.getRepository(Lesson)
-			.createQueryBuilder("lessons")
-			.where(`lessons.courseId = :courseId`, {courseId})
-			.orderBy("lessons.seqNo")
+		const product = await AppDataSource.getRepository(Products)
+			.createQueryBuilder("products")
+			.where(`products.companyId = :companyId`, {companyId})
+			.orderBy("products.seqNo")
 			.skip(pageNumber * pageSize)
 			.take(pageSize)
 			.getMany();
 
-		response.status(200).json({lessons});
+		response.status(200).json({product});
 	} catch (error) {
-		logger.error(`Error Occured While calling FindLessons()`);
+		logger.error(`Error Occured While calling FindProducts()`);
 		return next(error);
 	}
 }

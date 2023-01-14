@@ -7,29 +7,32 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from "typeorm";
-import {Course} from "./course";
+import {Company} from "./company";
 
 @Entity({
-	name: "LESSON",
+	name: "PRODUCTS",
 })
-export class Lesson {
+export class Products {
 	@PrimaryGeneratedColumn()
 	id: number;
 
 	@Column()
-	title: string;
+	brandName: string;
 
 	@Column()
-	duration: string;
+	genericName: string;
+
+	@Column()
+	imageUrl: string;
 
 	@Column()
 	seqNo: number;
 
-	@ManyToOne(() => Course, (course) => course.lessons)
+	@ManyToOne(() => Company, (company) => company.products)
 	@JoinColumn({
-		name: "courseId",
+		name: "companyId",
 	})
-	course: Course;
+	company: Company;
 
 	@CreateDateColumn()
 	createdDT: Date;
