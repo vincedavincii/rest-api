@@ -2,30 +2,30 @@ import {NextFunction, Request, Response} from "express";
 import {logger} from "../logger";
 import {isInteger} from "../utils";
 import {AppDataSource} from "../dataSource";
-import {Course} from "../models/course";
+import {Company} from "../models/company";
 
-export default async function updateCourse(
+export default async function updateCompany(
 	request: Request,
 	response: Response,
 	next: NextFunction
 ) {
 	try {
-		logger.debug("createCourse() triggered");
-		const courseId = request.params.courseId,
+		logger.debug("createCompany() triggered");
+		const companyId = request.params.companyId,
 			changes = request.body;
-		if (!isInteger(courseId)) {
-			throw `Invalid course id ${courseId}`;
+		if (!isInteger(companyId)) {
+			throw `Invalid course id ${companyId}`;
 		}
 		await AppDataSource.createQueryBuilder()
-			.update(Course)
+			.update(Company)
 			.set(changes)
-			.where(`id = :courseId`, {courseId})
+			.where(`id = :companyId`, {companyId})
 			.execute();
 		response.status(200).json({
-			message: `Course ${courseId} was updated successfully`,
+			message: `Company ${companyId} was updated successfully`,
 		});
 	} catch (error) {
-		logger.error("Error updating course");
+		logger.error("Error updating company");
 		return next(error);
 	}
 }

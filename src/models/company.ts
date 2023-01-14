@@ -6,12 +6,12 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from "typeorm";
-import {Lesson} from "./lesson";
+import {Products} from "./products";
 
 @Entity({
-	name: "COURSES",
+	name: "COMPANY",
 })
-export class Course {
+export class Company {
 	@PrimaryGeneratedColumn()
 	id: number;
 
@@ -19,21 +19,19 @@ export class Course {
 	seqNo: number;
 
 	@Column()
-	title: string;
+	name: string;
 
 	@Column()
-	iconUrl: string;
+	country: string;
 
 	@Column()
-	longDescription: string;
+	address: string;
 
 	@Column()
-	category: string;
-	@Column()
-	url: string;
+	companyUrl: string;
 
-	@OneToMany(() => Lesson, (lesson) => lesson.course)
-	lessons: Lesson[];
+	@OneToMany(() => Products, (products) => products.company)
+	products: Products[];
 
 	@CreateDateColumn()
 	createdDT: Date;
